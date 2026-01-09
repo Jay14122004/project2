@@ -1,0 +1,50 @@
+.bgLight {
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+
+.maxWidth {
+    max-width: 400px;
+}
+
+
+.red {
+    color: #C8242F;
+    font-weight: 900;
+}
+
+.wh {
+    height: 58px;
+    width: 272px;
+}
+
+.textDark {
+    color: #3E3E3E;
+}
+
+.roboto {
+    font: normal normal 300 40px/47px Roboto;
+}
+
+.bgRed {
+    background-color: #C8242F;
+    font: normal normal medium 18px/24px Roboto;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+.fp {
+    font: normal normal normal 15px/20px Roboto;
+    letter-spacing: 0px;
+    color: #ADADAD;
+    opacity: 1;
+}
+
+.linkR {
+    text-align: left;
+    font: normal normal normal 15px/20px Roboto;
+    letter-spacing: 0px;
+    color: #C8242F;
+    opacity: 1;
+}

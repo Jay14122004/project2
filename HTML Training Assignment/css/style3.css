@@ -1,0 +1,259 @@
+/* Navbar */
+
+.bgLight {
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.WHimg {
+    width: 18px;
+    height: 12px;
+}
+
+
+
+
+
+
+
+.navbar-nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  .size1 {
+    flex: 1 1 auto; 
+    min-width: 120px;
+    margin-left: 1rem;
+  }
+  
+  
+  .size2, .size3 {
+    flex: 0 0 auto; 
+    width: 40px;    
+    text-align: center;
+  }
+  
+  
+  .size4 {
+    flex: 0 1 auto; 
+    white-space: nowrap; 
+    font-size: 14px; 
+  }
+  
+  
+  @media (max-width: 400px) {
+    .size4 {
+      display: none; 
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* dasboard */
+
+
+/* Sidebar */
+
+.img {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+.pm {
+    margin: 10px;
+    padding: 10px;
+}
+
+
+.lowRed {
+    background: #FFF3F4 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    opacity: 1;
+}
+
+
+/* Actual Form */
+
+.fontStyle1 {
+    font-weight: 500;
+    font-family: Roboto;
+    font-size: 30px;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+}
+
+
+.fontStyle2 {
+    font-weight: 300;
+    font-family: Roboto;
+    font-size: 22px;
+    /* font: normal normal medium 22px/29px Roboto; */
+    letter-spacing: 0px;
+    color: #3E3E3E;
+    opacity: 1;
+}
+
+
+
+/* floating input box */
+
+.input-container {
+    position: relative;
+
+}
+
+.input-container input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+}
+
+.input-container label {
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 10px;
+    color: #999;
+
+    transition: 0.2s ease all;
+    background-color: white;
+    padding: 0 5px;
+}
+
+
+.input-container input:focus~label,
+.input-container input:not(:placeholder-shown)~label {
+    top: -10px;
+    left: 8px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+
+.input-container input:focus {
+    border-color: #007bff;
+}
+
+
+
+.fontStyle3 {
+    font: normal normal medium 18px/24px Roboto;
+    letter-spacing: 0px;
+    color: #3E3E3E;
+    opacity: 1;
+}
+
+
+.custom-color-radio .form-check-input:checked {
+    background-color: #C8242F;
+    border-color: #ff0000;
+}
+
+
+.custom-color-radio .form-check-input {
+    border-color: #000000;
+}
+
+
+
+
+
+
+.custom-tabs .nav-link.active {
+    color: #C8242F;
+}
+
+
+.custom-tabs .nav-link.active::after {
+    background-color: #C8242F;
+}
+
+
+.custom-tabs .nav-link:not(.active) {
+    color: #000000; /* Black color for non-active tabs */
+}
+
+
+.custom-tabs .nav-link:not(.active):hover,
+.custom-tabs .nav-link:not(.active):focus {
+    color: #333333;
+}
+
+
+
+.custom-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 50rem;
+    border: 1px solid #C8242F;
+    color: #C8242F;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-upload-btn:hover {
+    background-color: #C8242F;
+    color: #fff;
+}
+
+
+.text-muted.small {
+    color: #adb5bd !important;
+    font-size: 0.875em;
+}
+
+
+
+@media (min-width: 768px) {
+    #collapseExample {
+        display: block !important;
+        height: auto !important;
+        visibility: visible !important;
+    }
+
+    #sidebar-toggle {
+        pointer-events: none;   
+        opacity: 0.5;           
+    }
+}
+
+
+@media (max-width: 767.98px) {
+    #sidebar-toggle {
+        pointer-events: auto;
+        opacity: 1;
+    }
+}
+
+
+@media (max-width: 767.98px) {
+    .bgColor {
+        width: 100%;
+    }
+}
+
