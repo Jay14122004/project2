@@ -1,0 +1,463 @@
+
+-- -- creation of roles table
+
+-- CREATE TABLE hc.roles (
+--     role_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     role_name VARCHAR(50) UNIQUE NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE
+-- );
+
+-- ALTER TABLE hc.users
+-- ADD COLUMN role_id UUID;
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT fk_users_roles
+-- FOREIGN KEY (role_id)
+-- REFERENCES hc.roles(role_id);
+
+-- INSERT INTO hc.roles (role_name) VALUES
+-- ('Admin'),
+-- ('Doctor'),
+-- ('Patient'),
+-- ('Manager'),
+-- ('Staff');
+
+
+
+-- UPDATE hc.users
+-- SET role_id = 'f2fe24b9-93d1-4a9c-8fee-fe9d7a674f10'
+-- WHERE first_name = 'Axay';
+
+-- UPDATE hc.users
+-- SET role_id = '91c49c79-2a88-44ac-9afe-444c771325a7'
+-- WHERE first_name = 'akash';
+
+-- UPDATE hc.users
+-- SET role_id = 'caa0968e-f796-4644-b7f4-ece3ee5bfaa5'
+-- WHERE first_name = 'jaimin';
+
+-- UPDATE hc.users
+-- SET role_id = 'd63e343d-af2a-4679-a087-53d3414d1daf'
+-- WHERE first_name = 'axi';
+
+-- UPDATE hc.users
+-- SET role_id = '6c28654a-b665-47b9-886b-775ac8f1a5c7'
+-- WHERE first_name = 'prince';
+
+-- UPDATE hc.users
+-- SET role_id = '6c28654a-b665-47b9-886b-775ac8f1a5c7'
+-- WHERE first_name = 'Anni';
+
+-- UPDATE hc.users
+-- SET role_id = 'caa0968e-f796-4644-b7f4-ece3ee5bfaa5'
+-- WHERE first_name = 'aradhy';
+
+-- UPDATE hc.users
+-- SET role_id = 'd63e343d-af2a-4679-a087-53d3414d1daf'
+-- WHERE first_name = 'kishan';
+
+-- UPDATE hc.users
+-- SET role_id = 'f2fe24b9-93d1-4a9c-8fee-fe9d7a674f10'
+-- WHERE first_name = 'bhargav';
+
+-- UPDATE hc.users
+-- SET role_id = '91c49c79-2a88-44ac-9afe-444c771325a7'
+-- WHERE first_name = 'prit';
+
+
+
+-- -- creation of serviceType table
+
+-- CREATE TABLE hc.service_types (
+--     service_type_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     service_type_name VARCHAR(100) UNIQUE NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE
+-- );
+
+
+
+-- INSERT INTO hc.service_types (service_type_name) VALUES
+-- ('Healthcare'),
+-- ('Laboratory'),
+-- ('Pharmacy'),
+-- ('Insurance'),
+-- ('Wellness');
+
+-- -- creation of categories table
+
+-- CREATE TABLE hc.categories (
+--     category_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     service_type_id UUID NOT NULL,
+--     category_name VARCHAR(100) NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE,
+
+--     CONSTRAINT fk_categories_service_types
+--     FOREIGN KEY (service_type_id)
+--     REFERENCES hc.service_types(service_type_id)
+-- );
+
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Dermatology'
+-- FROM hc.service_types
+-- WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Orthopedics'
+-- FROM hc.service_types
+-- WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'General Medicine'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Cardiology'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Neurology'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Blood Test'
+-- FROM hc.service_types WHERE service_type_name = 'Laboratory';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'X-Ray'
+-- FROM hc.service_types WHERE service_type_name = 'Laboratory';
+
+
+-- -- creation of subCategories
+
+-- CREATE TABLE hc.sub_categories (
+--     sub_category_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     category_id UUID NOT NULL,
+--     sub_category_name VARCHAR(100) NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE,
+
+--     CONSTRAINT fk_sub_categories_categories
+--     FOREIGN KEY (category_id)
+--     REFERENCES hc.categories(category_id)
+-- );
+
+
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Diabetes'
+-- FROM hc.categories WHERE category_name = 'General Medicine';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Hypertension'
+-- FROM hc.categories WHERE category_name = 'General Medicine';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'ECG'
+-- FROM hc.categories WHERE category_name = 'Cardiology';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'CBC'
+-- FROM hc.categories WHERE category_name = 'Blood Test';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Lipid Profile'
+-- FROM hc.categories WHERE category_name = 'Blood Test';
+
+
+-- -- Aggregate function
+
+-- SELECT COUNT(*) AS total_users FROM hc.users;
+
+-- SELECT COUNT(*) AS total_active_users FROM hc.users
+-- WHERE is_active = 'true';
+
+-- SELECT 
+--     r.role_name,
+--     COUNT(*) AS user_count
+-- FROM hc.users u
+-- JOIN hc.roles r
+--     ON u.role_id = r.role_id
+-- GROUP BY r.role_name
+-- ORDER BY user_count DESC;
+
+
+-- SELECT MAX(birth_date) AS maximum_date,MIN(birth_date) AS minimum_date FROM hc.users;
+
+-- SELECT AVG((CURRENT_DATE - birth_date)/365) AS Average_age
+-- FROM hc.users;
+
+
+
+-- SELECT 
+--     s.service_type_name,
+--     COUNT(c.category_id) AS total_categories
+-- FROM hc.categories c
+-- JOIN hc.service_types s
+--     ON c.service_type_id = s.service_type_id
+-- GROUP BY s.service_type_name
+-- ORDER BY total_categories DESC;
+
+-- SELECT 
+-- 	c.category_name,
+-- 	COUNT(s.sub_category_id) AS total_sub_categories
+-- FROM hc.categories c
+-- JOIN hc.sub_categories s
+-- 	ON c.category_id = s.category_id
+-- GROUP BY c.category_name
+-- ORDER BY total_sub_categories DESC;
+
+
+-- -- Group and having
+
+-- SELECT 
+-- 	r.role_name,
+-- 	COUNT(u.user_id) AS total_users
+-- FROM hc.users u
+-- JOIN hc.roles r
+-- 	ON u.role_id = r.role_id
+-- GROUP BY r.role_name;
+
+
+
+
+-- SELECT 
+-- 	r.role_name,
+-- 	COUNT(u.user_id) AS total_users
+-- FROM hc.users u
+-- JOIN hc.roles r
+-- 	ON u.role_id = r.role_id
+-- GROUP BY r.role_name
+-- HAVING COUNT(u.user_id)>2;
+
+
+-- SELECT
+-- 	s.service_type_name,
+-- 	COUNT(c.category_id) AS total_categories
+-- FROM hc.service_types s
+-- JOIN hc.categories c
+-- ON s.service_type_id = c.service_type_id
+-- GROUP BY s.service_type_id
+-- HAVING COUNT(c.category_id)>3;
+
+
+
+
+
+-- SELECT
+-- 	c.category_name,
+-- 	COUNT(s.sub_category_id) AS total_sub_categories
+-- FROM hc.categories c
+-- JOIN hc.sub_categories s
+-- ON c.category_id = s.category_id
+-- GROUP BY c.category_id
+-- HAVING COUNT(s.sub_category_id)>=2;
+
+
+
+
+-- SELECT
+--     EXTRACT(YEAR FROM birth_date) AS birth_year,
+--     COUNT(*) AS total_users
+-- FROM hc.users
+-- GROUP BY birth_year;
+
+
+-- SELECT
+--     EXTRACT(YEAR FROM birth_date) AS birth_year
+-- FROM hc.users
+-- GROUP BY birth_year
+-- HAVING COUNT(*) > 5;
+
+
+
+-- SELECT * FROM hc.users;
+
+
+
+-- -- JOINS
+
+-- SELECT s.service_type_name,c.category_name
+-- FROM hc.categories c
+-- INNER JOIN hc.service_types s
+--     ON c.service_type_id = s.service_type_id;
+
+
+-- SELECT s.service_type_name, c.category_name
+-- FROM hc.service_types s
+-- LEFT JOIN hc.categories c
+--     ON s.service_type_id = c.service_type_id;
+
+
+-- SELECT c.category_name,s.sub_category_name
+-- FROM hc.sub_categories s
+-- RIGHT JOIN hc.categories c
+-- ON c.category_id = s.category_id;
+
+-- -- exists
+
+-- SELECT r.role_name
+-- FROM hc.roles r
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.users u
+--     WHERE u.role_id = r.role_id
+-- );
+
+
+-- SELECT s.service_type_name
+-- FROM hc.service_types s
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.categories c
+--     WHERE s.service_type_id = c.service_type_id
+-- );
+
+-- SELECT c.category_name
+-- FROM hc.categories c
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.sub_categories s
+--     WHERE c.category_id = s.category_id
+-- );
+
+-- SELECT u.first_name,u.last_name
+-- FROM hc.users u
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.roles r
+--     WHERE u.role_id = r.role_id
+-- );
+
+-- -- CTE
+
+-- WITH category_counts AS (
+--     SELECT 
+--         c.service_type_id,
+--         COUNT(c.category_id) AS total_categories
+--     FROM hc.categories c
+--     GROUP BY c.service_type_id
+-- )
+-- SELECT 
+--     s.service_type_name,
+--     cc.total_categories
+-- FROM hc.service_types s
+-- LEFT JOIN category_counts cc
+--     ON s.service_type_id = cc.service_type_id;
+
+-- -- ALTER
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT check_mobile_length
+-- CHECK (char_length(mobile_number) <= 15);
+
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT check_birth_date
+-- CHECK (birth_date < CURRENT_DATE);
+
+
+-- -- index
+
+-- CREATE INDEX email_index
+-- ON hc.users(email);
+
+
+-- -- date & time handling
+
+-- UPDATE hc.users
+-- SET created_date= CURRENT_DATE - 7
+-- WHERE first_name='Anni';
+
+-- SELECT * FROM hc.users;
+
+
+-- SELECT * FROM hc.users
+-- WHERE created_date= CURRENT_DATE;
+
+
+-- SELECT * FROM hc.users
+-- WHERE created_date >= CURRENT_DATE - 30;
+
+-- SELECT first_name,last_name,EXTRACT(YEAR FROM birth_date) AS year 
+-- FROM hc.users;
+
+-- SELECT first_name,last_name,((CURRENT_DATE - birth_date)/365) AS age 
+-- FROM hc.users;
+
+-- SELECT EXTRACT(YEAR FROM birth_date),count(*) as year
+-- FROM hc.users
+-- GROUP BY EXTRACT(YEAR FROM birth_date);
+
+-- -- window functions
+
+-- SELECT * FROM hc.users;
+
+-- SELECT * FROM hc.roles;
+
+-- WITH name_role AS (
+-- 	SELECT u.first_name,u.last_name,r.role_name,u.created_date
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+	
+-- )
+-- SELECT first_name,last_name,ROW_NUMBER() OVER (PARTITION BY role_name ORDER BY created_date),created_date,role_name
+-- FROM name_role;
+
+
+-- WITH rol_based_rank AS(
+-- 	SELECT r.role_name,COUNT(*) AS total_users
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- 	GROUP BY r.role_name
+
+-- )
+-- SELECT role_name,total_users,RANK() OVER(ORDER BY total_users) AS rank
+-- FROM rol_based_rank;
+
+
+-- WITH lag_created_date AS(
+-- 	SELECT r.role_name,u.created_date,u.first_name
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- )
+-- SELECT role_name,first_name,created_date,LAG(created_date) OVER(PARTITION BY role_name)
+-- FROM lag_created_date;
+
+
+
+-- WITH lead_created_date AS(
+-- 	SELECT r.role_name,u.created_date,u.first_name
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- )
+-- SELECT role_name,first_name,created_date,LEAD(created_date) OVER(PARTITION BY role_name)
+-- FROM lead_created_date;
+
+
+--  WITH sec_old_user AS (
+-- 	SELECT u.first_name,u.last_name,r.role_name,u.created_date
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+	
+-- ),
+-- 	ranked_user AS(
+-- 	 SELECT first_name,last_name,role_name,ROW_NUMBER() OVER (PARTITION BY role_name ORDER BY created_date) AS second_oldest
+-- 	 FROM sec_old_user
+
+-- )
+-- SELECT first_name,last_name,role_name,second_oldest
+-- FROM ranked_user
+-- WHERE second_oldest = 2;
+
+
+SELECT * FROM hc.users;
+-- SELECT * FROM hc.roles;
+-- SELECT * FROM hc.service_types;
+-- SELECT * FROM hc.sub_categories;
+-- SELECT * FROM hc.categories;
+
