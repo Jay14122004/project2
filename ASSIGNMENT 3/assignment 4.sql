@@ -34,60 +34,65 @@
 
 -- db_admin
 
--- GRANT CONNECT ON DATABASE homecare_db TO db_admin;
--- GRANT CREATE,USAGE ON SCHEMA public TO db_admin;
+GRANT CONNECT ON DATABASE homecare_db TO db_admin;
+GRANT CREATE,USAGE ON SCHEMA public TO db_admin;
 
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_admin;
--- GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO db_admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_admin;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO db_admin;
 
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON TABLES TO db_admin;
 
 -- app_owner
 
--- GRANT CONNECT ON DATABASE homecare_db TO app_owner;
--- GRANT CREATE,USAGE ON SCHEMA public TO app_owner;
+GRANT CONNECT ON DATABASE homecare_db TO app_owner;
+GRANT CREATE,USAGE ON SCHEMA public TO app_owner;
 
 
 -- app_user
 
--- GRANT CONNECT ON DATABASE homecare_db TO app_user;
--- GRANT CREATE,USAGE ON SCHEMA public TO app_user;
+GRANT CONNECT ON DATABASE homecare_db TO app_user;
+GRANT USAGE,CREATE ON SCHEMA public TO app_user;
 
--- GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA public TO app_user;
+GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA public TO app_user;
 
 
 -- app_readonly
 
--- GRANT CONNECT ON DATABASE homecare_db TO app_readonly;
--- GRANT USAGE,CREATE ON SCHEMA public TO app_readonly;
-
+GRANT CONNECT ON DATABASE homecare_db TO app_readonly;
+GRANT USAGE ON SCHEMA hc TO app_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA hc TO app_readonly;
 
 -- revoke
 
--- REVOKE CREATE ON SCHEMA public FROM app_readonly;
+REVOKE DELETE ON TABLE hc.users FROM app_readonly;
 
 -- demostrate
 --  schema level
 
 
--- GRANT CREATE ON SCHEMA hc TO app_readonly;
--- REVOKE CREATE ON SCHEMA hc FROM app_readonly
+GRANT CREATE ON SCHEMA hc TO app_readonly;
+REVOKE CREATE ON SCHEMA hc FROM app_readonly;
 
 -- table level
 
--- GRANT DELETE ON TABLE hc.users TO app_readonly;
--- REVOKE DELETE ON TABLE hc.users FROM app_readonly;
+GRANT DELETE ON TABLE hc.users TO app_readonly;
+REVOKE DELETE ON TABLE hc.users FROM app_readonly;
 
 
 -- public
 
--- REVOKE ALL PRIVILEGES ON SCHEMA public FROM PUBLIC;
--- REVOKE ALL PRIVILEGES ON DATABASE homecare_db FROM PUBLIC;
+REVOKE ALL PRIVILEGES ON SCHEMA hc FROM PUBLIC;
+REVOKE ALL PRIVILEGES ON DATABASE homecare_db FROM PUBLIC;
 
 
 
 
--- GRANT SELECT,UPDATE,INSERT,DELETE ON ALL TABLES IN SCHEMA hc TO app_user;
+GRANT SELECT,UPDATE,INSERT,DELETE ON ALL TABLES IN SCHEMA hc TO app_user;
 
--- GRANT SELECT ON ALL TABLES IN SCHEMA hc TO app_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA hc TO app_readonly;
 
--- REVOKE TRUNCATE ON ALL TABLES IN SCHEMA public FROM app_readonly;
+
+-- REVOKE CREATE ON SCHEMA hc FROM app_user;
+
+-- REVOKE TRUNCATE ON ALL TABLES IN SCHEMA hc FROM app_user;
