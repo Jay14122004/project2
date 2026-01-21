@@ -66,7 +66,22 @@
 -- REVOKE CREATE ON SCHEMA public FROM app_readonly;
 
 -- demostrate
+--  schema level
 
+
+-- GRANT CREATE ON SCHEMA hc TO app_readonly;
+-- REVOKE CREATE ON SCHEMA hc FROM app_readonly
+
+-- table level
+
+-- GRANT DELETE ON TABLE hc.users TO app_readonly;
+-- REVOKE DELETE ON TABLE hc.users FROM app_readonly;
+
+
+-- public
+
+-- REVOKE ALL PRIVILEGES ON SCHEMA public FROM PUBLIC;
+-- REVOKE ALL PRIVILEGES ON DATABASE homecare_db FROM PUBLIC;
 
 
 
