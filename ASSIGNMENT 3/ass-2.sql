@@ -1,358 +1,459 @@
--- Views & Materialized Views
 
--- CREATE VIEW users_details AS
--- SELECT u.user_id,u.first_name || ' ' || u.last_name AS full_name,u.email,r.role_name
+-- creation of roles table
+
+-- CREATE TABLE hc.roles (
+--     role_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     role_name VARCHAR(50) UNIQUE NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE
+-- );
+
+-- ALTER TABLE hc.users
+-- ADD COLUMN role_id UUID;
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT fk_users_roles
+-- FOREIGN KEY (role_id)
+-- REFERENCES hc.roles(role_id);
+
+-- INSERT INTO hc.roles (role_name) VALUES
+-- ('Admin'),
+-- ('Doctor'),
+-- ('Patient'),
+-- ('Manager'),
+-- ('Staff');
+
+
+
+-- UPDATE hc.users
+-- SET role_id = 'a6f65b5c-9ce1-4829-b353-bc8324fdea37'
+-- WHERE first_name = 'Axay';
+
+-- UPDATE hc.users
+-- SET role_id = '951bef29-1923-4d6a-9656-be03c0c70272'
+-- WHERE first_name = 'akash';
+
+-- UPDATE hc.users
+-- SET role_id = '8ce272c6-8a07-4a55-88ca-0c8fa05708f0'
+-- WHERE first_name = 'jaimin';
+
+
+-- UPDATE hc.users
+-- SET role_id = '8ce272c6-8a07-4a55-88ca-0c8fa05708f0'
+-- WHERE first_name = 'axi';
+
+-- UPDATE hc.users
+-- SET role_id = '240ae337-61d6-498c-a3a4-6d08baeaac37'
+-- WHERE first_name = 'prince';
+
+-- UPDATE hc.users
+-- SET role_id = 'c085b691-ed01-44d5-9872-1df3bfb39f82'
+-- WHERE first_name = 'Anni';
+
+-- UPDATE hc.users
+-- SET role_id = 'c085b691-ed01-44d5-9872-1df3bfb39f82'
+-- WHERE first_name = 'aradhy';
+
+-- UPDATE hc.users
+-- SET role_id = 'c085b691-ed01-44d5-9872-1df3bfb39f82'
+-- WHERE first_name = 'kishan';
+
+-- UPDATE hc.users
+-- SET role_id = '951bef29-1923-4d6a-9656-be03c0c70272'
+-- WHERE first_name = 'bhargav';
+
+-- UPDATE hc.users
+-- SET role_id = '240ae337-61d6-498c-a3a4-6d08baeaac37'
+-- WHERE first_name = 'prit';
+
+
+
+-- creation of serviceType table
+
+-- CREATE TABLE hc.service_types (
+--     service_type_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     service_type_name VARCHAR(100) UNIQUE NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE
+-- );
+
+
+
+-- INSERT INTO hc.service_types (service_type_name) VALUES
+-- ('Healthcare'),
+-- ('Laboratory'),
+-- ('Pharmacy'),
+-- ('Insurance'),
+-- ('Wellness');
+
+-- creation of categories table
+
+-- CREATE TABLE hc.categories (
+--     category_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     service_type_id UUID NOT NULL,
+--     category_name VARCHAR(100) NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE,
+
+--     CONSTRAINT fk_categories_service_types
+--     FOREIGN KEY (service_type_id)
+--     REFERENCES hc.service_types(service_type_id)
+-- );
+
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Dermatology'
+-- FROM hc.service_types
+-- WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Orthopedics'
+-- FROM hc.service_types
+-- WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'General Medicine'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Cardiology'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Neurology'
+-- FROM hc.service_types WHERE service_type_name = 'Healthcare';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'Blood Test'
+-- FROM hc.service_types WHERE service_type_name = 'Laboratory';
+
+-- INSERT INTO hc.categories (service_type_id, category_name)
+-- SELECT service_type_id, 'X-Ray'
+-- FROM hc.service_types WHERE service_type_name = 'Laboratory';
+
+
+-- creation of subCategories
+
+-- CREATE TABLE hc.sub_categories (
+--     sub_category_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+--     category_id UUID NOT NULL,
+--     sub_category_name VARCHAR(100) NOT NULL,
+--     created_date DATE DEFAULT CURRENT_DATE,
+
+--     CONSTRAINT fk_sub_categories_categories
+--     FOREIGN KEY (category_id)
+--     REFERENCES hc.categories(category_id)
+-- );
+
+
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Diabetes'
+-- FROM hc.categories WHERE category_name = 'General Medicine';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Hypertension'
+-- FROM hc.categories WHERE category_name = 'General Medicine';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'ECG'
+-- FROM hc.categories WHERE category_name = 'Cardiology';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'CBC'
+-- FROM hc.categories WHERE category_name = 'Blood Test';
+
+-- INSERT INTO hc.sub_categories (category_id, sub_category_name)
+-- SELECT category_id, 'Lipid Profile'
+-- FROM hc.categories WHERE category_name = 'Blood Test';
+
+
+-- Aggregate function
+
+-- SELECT COUNT(*) AS total_users FROM hc.users;
+
+-- SELECT COUNT(*) AS total_active_users FROM hc.users
+-- WHERE is_active = 'true';
+
+-- SELECT 
+--     r.role_name,
+--     COUNT(*) AS user_count
 -- FROM hc.users u
 -- JOIN hc.roles r
--- ON u.role_id = r.role_id;
+--     ON u.role_id = r.role_id
+-- GROUP BY r.role_name
+-- ORDER BY user_count DESC;
 
 
--- SELECT * FROM users_details;
+-- SELECT MAX(birth_date) AS maximum_date,MIN(birth_date) AS minimum_date FROM hc.users;
 
--- CREATE VIEW is_active_under_month AS
--- SELECT * FROM hc.users
--- WHERE is_active='true' AND created_date >= CURRENT_DATE - INTERVAL '30 days';
-
--- SELECT * FROM is_active_under_month;
+-- SELECT AVG((CURRENT_DATE - birth_date)/365) AS Average_age
+-- FROM hc.users;
 
 
--- CREATE MATERIALIZED VIEW role_per_users AS
--- SELECT r.role_name,COUNT(*) AS total_users
--- FROM hc.roles r
--- JOIN hc.users u
--- ON r.role_id = u.role_id
+
+-- SELECT 
+--     s.service_type_name,
+--     COUNT(c.category_id) AS total_categories
+-- FROM hc.categories c
+-- JOIN hc.service_types s
+--     ON c.service_type_id = s.service_type_id
+-- GROUP BY s.service_type_name
+-- ORDER BY total_categories DESC;
+
+-- SELECT 
+-- 	c.category_name,
+-- 	COUNT(s.sub_category_id) AS total_sub_categories
+-- FROM hc.categories c
+-- JOIN hc.sub_categories s
+-- 	ON c.category_id = s.category_id
+-- GROUP BY c.category_name
+-- ORDER BY total_sub_categories DESC;
+
+
+-- Group and having
+
+-- SELECT 
+-- 	r.role_name,
+-- 	COUNT(u.user_id) AS total_users
+-- FROM hc.users u
+-- JOIN hc.roles r
+-- 	ON u.role_id = r.role_id
 -- GROUP BY r.role_name;
 
--- SELECT * FROM role_per_users;
-
--- REFRESH MATERIALIZED VIEW role_per_users;
-
--- Functions
 
 
--- SELECT * FROM role_per_users;
 
--- CREATE OR REPLACE FUNCTION hc.get_user_count_by_role(p_role_id UUID)
--- RETURNS INTEGER
--- LANGUAGE SQL
--- AS $$
--- SELECT COUNT(*)
+-- SELECT 
+-- 	r.role_name,
+-- 	COUNT(u.user_id) AS total_users
+-- FROM hc.users u
+-- JOIN hc.roles r
+-- 	ON u.role_id = r.role_id
+-- GROUP BY r.role_name
+-- HAVING COUNT(u.user_id)>2;
+
+
+-- SELECT
+-- 	s.service_type_name,
+-- 	COUNT(c.category_id) AS total_categories
+-- FROM hc.service_types s
+-- JOIN hc.categories c
+-- ON s.service_type_id = c.service_type_id
+-- GROUP BY s.service_type_id
+-- HAVING COUNT(c.category_id)>3
+
+
+
+
+
+-- SELECT
+-- 	c.category_name,
+-- 	COUNT(s.sub_category_id) AS total_sub_categories
+-- FROM hc.categories c
+-- JOIN hc.sub_categories s
+-- ON c.category_id = s.category_id
+-- GROUP BY c.category_id
+-- HAVING COUNT(s.sub_category_id)>=2;
+
+
+
+
+-- SELECT
+--     EXTRACT(YEAR FROM birth_date) AS birth_year,
+--     COUNT(*) AS total_users
 -- FROM hc.users
--- WHERE role_id = p_role_id;
--- $$;
-
--- SELECT * FROM hc.get_user_count_by_role('a6f65b5c-9ce1-4829-b353-bc8324fdea37');
+-- GROUP BY birth_year
 
 
--- CREATE OR REPLACE FUNCTION hc.get_user_full_name(p_user_id UUID)
--- RETURNS TEXT
--- LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- full_name TEXT;
--- BEGIN
--- SELECT first_name || ' ' || last_name
--- INTO full_name
+-- SELECT
+--     EXTRACT(YEAR FROM birth_date) AS birth_year
 -- FROM hc.users
--- WHERE user_id = p_user_id;
--- RETURN full_name;
--- END;
--- $$;
-
-
--- SELECT * FROM hc.get_user_full_name('314d81ea-05fa-43a9-acb6-cd0e94704aba');
+-- GROUP BY birth_year
+-- HAVING COUNT(*) > 5;
 
 
 
--- CREATE OR REPLACE FUNCTION hc.calculate_age(p_birth_date DATE)
--- RETURNS INTEGER
--- LANGUAGE plpgsql
--- AS $$
--- DECLARE
---     age INTEGER;
--- BEGIN
---     age := (CURRENT_DATE - p_birth_date) / 365;
---     RETURN age;
--- END;
--- $$;
--- SELECT hc.calculate_age('2004-12-14');
+-- SELECT * FROM hc.users;
 
 
 
--- CREATE OR REPLACE FUNCTION hc.users_created_today()
--- RETURNS TABLE (
---     user_id UUID,
---     first_name VARCHAR,
---     last_name VARCHAR,
---     email VARCHAR
--- )
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
---     RETURN QUERY
---     SELECT 
---         u.user_id,
---         u.first_name,
---         u.last_name,
---         u.email
+-- JOINS
+
+-- SELECT s.service_type_name,c.category_name
+-- FROM hc.categories c
+-- INNER JOIN hc.service_types s
+--     ON c.service_type_id = s.service_type_id;
+
+
+-- SELECT s.service_type_name, c.category_name
+-- FROM hc.service_types s
+-- LEFT JOIN hc.categories c
+--     ON s.service_type_id = c.service_type_id;
+
+
+-- SELECT c.category_name,s.sub_category_name
+-- FROM hc.sub_categories s
+-- RIGHT JOIN hc.categories c
+-- ON c.category_id = s.category_id;
+
+-- exists
+
+-- SELECT r.role_name
+-- FROM hc.roles r
+-- WHERE EXISTS (
+--     SELECT 1
 --     FROM hc.users u
---     WHERE u.created_date = CURRENT_DATE;
--- END;
--- $$;
+--     WHERE u.role_id = r.role_id
+-- );
 
 
--- SELECT * FROM hc.users_created_today();
+-- SELECT s.service_type_name
+-- FROM hc.service_types s
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.categories c
+--     WHERE s.service_type_id = c.service_type_id
+-- );
 
+-- SELECT c.category_name
+-- FROM hc.categories c
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.sub_categories s
+--     WHERE c.category_id = s.category_id
+-- );
 
--- CREATE OR REPLACE FUNCTION hc.get_user_email(
--- IN p_user_id UUID,
--- OUT p_email VARCHAR
+-- SELECT u.first_name,u.last_name
+-- FROM hc.users u
+-- WHERE EXISTS (
+--     SELECT 1
+--     FROM hc.roles r
+--     WHERE u.role_id = r.role_id
+-- );
+
+-- CTE
+
+-- WITH category_counts AS (
+--     SELECT 
+--         c.service_type_id,
+--         COUNT(c.category_id) AS total_categories
+--     FROM hc.categories c
+--     GROUP BY c.service_type_id
 -- )
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- SELECT email INTO p_email
+-- SELECT 
+--     s.service_type_name,
+--     cc.total_categories
+-- FROM hc.service_types s
+-- LEFT JOIN category_counts cc
+--     ON s.service_type_id = cc.service_type_id;
+
+-- ALTER
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT check_mobile_length
+-- CHECK (char_length(mobile_number) <= 15);
+
+
+-- ALTER TABLE hc.users
+-- ADD CONSTRAINT check_birth_date
+-- CHECK (birth_date < CURRENT_DATE);
+
+
+-- index
+
+-- CREATE INDEX email_index
+-- ON hc.users(email);
+
+
+-- date & time handling
+
+-- UPDATE hc.users
+-- SET created_date= CURRENT_DATE - 7
+-- WHERE first_name='Anni';
+
+-- SELECT * FROM hc.users;
+
+
+-- SELECT * FROM hc.users
+-- WHERE created_date= CURRENT_DATE;
+
+
+-- SELECT * FROM hc.users
+-- WHERE created_date >= CURRENT_DATE - 30;
+
+-- SELECT first_name,last_name,EXTRACT(YEAR FROM birth_date) AS year 
+-- FROM hc.users;
+
+-- SELECT first_name,last_name,((CURRENT_DATE - birth_date)/365) AS age 
+-- FROM hc.users;
+
+-- SELECT EXTRACT(YEAR FROM birth_date),count(*) as year
 -- FROM hc.users
--- WHERE user_id = p_user_id;
--- END;
--- $$;
+-- GROUP BY EXTRACT(YEAR FROM birth_date);
 
+-- window functions
 
+-- SELECT * FROM hc.users;
 
--- SELECT * FROM hc.get_user_email('fcae6878-c907-4ee1-bc60-cc91ed087679');
+-- SELECT * FROM hc.roles;
 
-
--- CREATE OR REPLACE FUNCTION hc.get_user_detail(p_user_id UUID)
--- RETURNS TABLE(
--- 	first_name VARCHAR(50),
--- 	last_name VARCHAR(50)
--- )
--- LANGUAGE plpgsql
--- AS $$
--- 	BEGIN
--- 	RETURN QUERY
--- 	SELECT u.first_name,u.last_name
--- 	FROM hc.users u
--- 	WHERE user_id = p_user_id;
--- 	END;
--- $$;
-
-
--- SELECT * FROM hc.get_user_detail('ab867a64-0fa0-46d3-b69b-31dd061b1e2f');
-
-
--- Stored Procedures
-
--- CREATE OR REPLACE PROCEDURE hc.insert_user(
--- p_first_name VARCHAR,
--- p_last_name VARCHAR,
--- p_email VARCHAR,
--- p_password TEXT,
--- p_created_by UUID,
--- p_mobile VARCHAR,
--- p_birth_date DATE,
--- p_address VARCHAR,
--- p_role_id UUID
--- )
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- IF EXISTS (SELECT 1 FROM hc.users WHERE email = p_email) THEN
--- RAISE EXCEPTION 'Email already exists';
--- END IF;
-
-
--- INSERT INTO hc.users (
--- first_name, last_name, email, password,
--- created_by, modified_by, created_date, modified_date,birth_date,address, mobile_number,role_id
--- ) VALUES (
--- p_first_name, p_last_name, p_email,
--- crypt('2356', gen_salt('bf')),
--- p_created_by, p_created_by, CURRENT_DATE, CURRENT_DATE,p_birth_date,p_address, p_mobile,p_role_id
--- );
--- END;
--- $$;
-
-
--- CALL hc.insert_user('aditya','dave','aditya555@gmail.com','adiytya@2003','1f4e0a30-53fb-442c-8fae-126de36639fa','8469712119','2005-12-15','canal road','f2fe24b9-93d1-4a9c-8fee-fe9d7a674f10');
-
-
--- CREATE OR REPLACE PROCEDURE hc.soft_delete_user(p_user_id UUID)
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- UPDATE hc.users
--- SET is_deleted = TRUE
--- WHERE user_id = p_user_id;
--- END;
--- $$;
-
--- CALL hc.soft_delete_user('0541d19b-7874-4108-9475-db12bc423ee5');
-
-
--- CREATE OR REPLACE PROCEDURE hc.update_role(get_user_id UUID,get_role_id UUID)
--- LANGUAGE plpgsql
--- AS $$
--- 	BEGIN
--- 		UPDATE hc.users
--- 		SET role_id = get_role_id
--- 		WHERE user_id = get_user_id;
--- 	END;
--- $$;
-
-
--- CALL hc.update_role('4105aa7f-38ed-4730-a97e-85277b87db19','91c49c79-2a88-44ac-9afe-444c771325a7');
-
--- CREATE TABLE audit_table(
--- 	user_name VARCHAR(50),
--- 	old_role VARCHAR(50),
--- 	new_role VARCHAR(50)
--- );
-
--- CREATE OR REPLACE PROCEDURE hc.update_role(get_user_id UUID,get_role_id UUID)
--- LANGUAGE plpgsql
--- AS $$
-
--- 	DECLARE
--- 		user_name VARCHAR(50);
--- 		old_role VARCHAR(50);
--- 		new_role VARCHAR(50);
--- 	BEGIN
--- 		SELECT first_name || ' ' || last_name
--- 		INTO user_name
--- 		FROM hc.users
--- 		WHERE user_id = get_user_id;
-
--- 		SELECT role_name
--- 		INTO old_role
--- 		FROM hc.users u
--- 		JOIN hc.roles r
--- 		ON u.role_id = r.role_id
--- 		WHERE u.user_id = get_user_id;
+-- WITH name_role AS (
+-- 	SELECT u.first_name,u.last_name,r.role_name,u.created_date
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
 	
--- 		UPDATE hc.users
--- 		SET role_id = get_role_id
--- 		WHERE user_id = get_user_id;
-
--- 		SELECT role_name
--- 		INTO new_role
--- 		FROM hc.users u
--- 		JOIN hc.roles r
--- 		ON u.role_id = r.role_id
--- 		WHERE u.user_id = get_user_id;
-
--- 		INSERT INTO audit_table (user_name,old_role,new_role) VALUES (user_name,old_role,new_role);
--- 	END;
--- $$;
+-- )
+-- SELECT first_name,last_name,ROW_NUMBER() OVER (PARTITION BY role_name ORDER BY created_date),created_date,role_name
+-- FROM name_role;
 
 
--- CALL hc.update_role('ccb2a956-8401-40eb-a226-6bd93d31dfba','a6f65b5c-9ce1-4829-b353-bc8324fdea37');
--- SELECT * FROM audit_table;
+-- WITH rol_based_rank AS(
+-- 	SELECT r.role_name,COUNT(*) AS total_users
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- 	GROUP BY r.role_name
 
--- DELETE FROM audit_table
--- WHERE user_name IS NULL;
-
-
--- Triggers
-
--- CREATE OR REPLACE FUNCTION hc.update_modified_date()
--- RETURNS TRIGGER
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- NEW.modified_date = CURRENT_DATE;
--- RETURN NEW;
--- END;
--- $$;
+-- )
+-- SELECT role_name,total_users,RANK() OVER(ORDER BY total_users) AS rank
+-- FROM rol_based_rank;
 
 
--- CREATE TRIGGER trg_update_modified_date
--- BEFORE UPDATE ON hc.users
--- FOR EACH ROW
--- EXECUTE FUNCTION hc.update_modified_date();
-
-
--- UPDATE hc.users
--- SET birth_date = '2003-08-23'
--- WHERE user_id = '95e6e132-433f-4be2-bf81-788592a252ff';
-
-
--- CREATE OR REPLACE FUNCTION hc.prevent_user_delete()
--- RETURNS TRIGGER
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- RAISE EXCEPTION 'User deletion is not allowed by admin';
--- END;
--- $$;
-
-
--- CREATE TRIGGER trg_prevent_delete
--- BEFORE DELETE ON hc.users
--- FOR EACH ROW
--- EXECUTE FUNCTION hc.prevent_user_delete();
-
--- DELETE FROM hc.users
--- WHERE birth_date = '2003-08-23';
-
-
--- CREATE TABLE hc.user_creation_audit(
---  user_name VARCHAR(50)
--- );
-
--- CREATE OR REPLACE FUNCTION hc.after_user_insert()
--- RETURNS TRIGGER
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
--- INSERT INTO hc.user_creation_audit(user_name)
--- VALUES (NEW.first_name || ' ' || NEW.last_name);
--- RETURN NEW;
--- END;
--- $$;
-
-
--- CREATE TRIGGER trg_after_user_insert
--- AFTER INSERT ON hc.users
--- FOR EACH ROW
--- EXECUTE FUNCTION hc.after_user_insert();
-
--- INSERT INTO hc.users(first_name,last_name,email,password,created_by,created_date,modified_by,modified_date,birth_date,address,mobile_number)
--- VALUES ('divyang','nakarani','dvnk@outlook.com',crypt('5555', gen_salt('bf')),'95e6e132-433f-4be2-bf81-788592a252ff','2026-01-20','1b3c731f-5a5e-4603-95d2-ea579953fe32','2026-01-20','2002-02-22','sp hostel','7568998945');
-
-
--- SELECT * FROM hc.user_creation_audit;
-
--- Cursors
+-- WITH lag_created_date AS(
+-- 	SELECT r.role_name,u.created_date,u.first_name
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- )
+-- SELECT role_name,first_name,created_date,LAG(created_date) OVER(PARTITION BY role_name)
+-- FROM lag_created_date;
 
 
 
--- CREATE OR REPLACE PROCEDURE get_user_id_email()
--- LANGUAGE plpgsql AS $$
--- 	DECLARE
--- 		user_record RECORD;
--- 		user_curl CURSOR FOR 
--- 			SELECT user_id, email FROM hc.users;
--- 	BEGIN
--- 		OPEN user_curl;
--- 		LOOP
--- 		FETCH user_curl INTO user_record;
--- 		EXIT WHEN NOT FOUND;
-
--- 		RAISE NOTICE 'user_id:- %,email:-%',user_record.user_id,user_record.email;
--- 		END LOOP;
--- 		CLOSE user_curl;
--- 	END;
--- 	$$;
+-- WITH lead_created_date AS(
+-- 	SELECT r.role_name,u.created_date,u.first_name
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+-- )
+-- SELECT role_name,first_name,created_date,LEAD(created_date) OVER(PARTITION BY role_name)
+-- FROM lead_created_date;
 
 
+--  WITH sec_old_user AS (
+-- 	SELECT u.first_name,u.last_name,r.role_name,u.created_date
+-- 	FROM hc.roles r
+-- 	JOIN hc.users u
+-- 	ON r.role_id = u.role_id
+	
+-- ),
+-- 	ranked_user AS(
+-- 	 SELECT first_name,last_name,role_name,ROW_NUMBER() OVER (PARTITION BY role_name ORDER BY created_date) AS second_oldest
+-- 	 FROM sec_old_user
 
-
--- CALL get_user_id_email();
-
-
-
-
+-- )
+-- SELECT first_name,last_name,role_name,second_oldest
+-- FROM ranked_user
+-- WHERE second_oldest = 2;
 
 
 
