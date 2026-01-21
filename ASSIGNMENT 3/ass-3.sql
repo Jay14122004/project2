@@ -1,13 +1,13 @@
+-- Views & Materialized Views
+
 -- CREATE VIEW users_details AS
--- SELECT u.user_id,u.first_name || ' ' || u.last_name,u.email,r.role_name
+-- SELECT u.user_id,u.first_name || ' ' || u.last_name AS full_name,u.email,r.role_name
 -- FROM hc.users u
 -- JOIN hc.roles r
 -- ON u.role_id = r.role_id;
 
 
 -- SELECT * FROM users_details;
--- SELECT * FROM hc.users;
-
 
 -- CREATE VIEW is_active_under_month AS
 -- SELECT * FROM hc.users
@@ -23,8 +23,11 @@
 -- ON r.role_id = u.role_id
 -- GROUP BY r.role_name;
 
+-- SELECT * FROM role_per_users;
+
 -- REFRESH MATERIALIZED VIEW role_per_users;
 
+-- Functions
 
 
 -- SELECT * FROM role_per_users;
@@ -38,7 +41,7 @@
 -- WHERE role_id = p_role_id;
 -- $$;
 
--- SELECT * FROM hc.get_user_count_by_role('91c49c79-2a88-44ac-9afe-444c771325a7');
+-- SELECT * FROM hc.get_user_count_by_role('a6f65b5c-9ce1-4829-b353-bc8324fdea37');
 
 
 -- CREATE OR REPLACE FUNCTION hc.get_user_full_name(p_user_id UUID)
@@ -52,13 +55,12 @@
 -- INTO full_name
 -- FROM hc.users
 -- WHERE user_id = p_user_id;
-
-
 -- RETURN full_name;
 -- END;
 -- $$;
 
--- SELECT * FROM hc.get_user_full_name('6cf550f3-fb86-4ac7-80a7-720832a4022c');
+
+-- SELECT * FROM hc.get_user_full_name('314d81ea-05fa-43a9-acb6-cd0e94704aba');
 
 
 
@@ -99,10 +101,6 @@
 -- $$;
 
 
--- UPDATE hc.users
--- SET created_date = CURRENT_DATE
--- WHERE user_id = '6cf550f3-fb86-4ac7-80a7-720832a4022c'
-
 -- SELECT * FROM hc.users_created_today();
 
 
@@ -119,7 +117,9 @@
 -- END;
 -- $$;
 
--- SELECT * FROM hc.get_user_email('1370cd80-904a-437d-9b98-f62f11cd48a3');
+
+
+-- SELECT * FROM hc.get_user_email('fcae6878-c907-4ee1-bc60-cc91ed087679');
 
 
 -- CREATE OR REPLACE FUNCTION hc.get_user_detail(p_user_id UUID)
@@ -138,10 +138,10 @@
 -- $$;
 
 
--- SELECT * FROM hc.get_user_detail('1370cd80-904a-437d-9b98-f62f11cd48a3');
+-- SELECT * FROM hc.get_user_detail('ab867a64-0fa0-46d3-b69b-31dd061b1e2f');
 
 
--- procedure
+-- Stored Procedures
 
 -- CREATE OR REPLACE PROCEDURE hc.insert_user(
 -- p_first_name VARCHAR,
@@ -246,12 +246,14 @@
 -- $$;
 
 
--- CALL hc.update_role('1370cd80-904a-437d-9b98-f62f11cd48a3','caa0968e-f796-4644-b7f4-ece3ee5bfaa5');
+-- CALL hc.update_role('ccb2a956-8401-40eb-a226-6bd93d31dfba','a6f65b5c-9ce1-4829-b353-bc8324fdea37');
 -- SELECT * FROM audit_table;
 
+-- DELETE FROM audit_table
+-- WHERE user_name IS NULL;
 
--- triggers
 
+-- Triggers
 
 -- CREATE OR REPLACE FUNCTION hc.update_modified_date()
 -- RETURNS TRIGGER
@@ -320,6 +322,38 @@
 
 
 -- SELECT * FROM hc.user_creation_audit;
+
+-- Cursors
+
+
+
+-- CREATE OR REPLACE PROCEDURE get_user_id_email()
+-- LANGUAGE plpgsql AS $$
+-- 	DECLARE
+-- 		user_record RECORD;
+-- 		user_curl CURSOR FOR 
+-- 			SELECT user_id, email FROM hc.users;
+-- 	BEGIN
+-- 		OPEN user_curl;
+-- 		LOOP
+-- 		FETCH user_curl INTO user_record;
+-- 		EXIT WHEN NOT FOUND;
+
+-- 		RAISE NOTICE 'user_id:- %,email:-%',user_record.user_id,user_record.email;
+-- 		END LOOP;
+-- 		CLOSE user_curl;
+-- 	END;
+-- 	$$;
+
+
+
+
+-- CALL get_user_id_email();
+
+
+
+
+
 
 
 
