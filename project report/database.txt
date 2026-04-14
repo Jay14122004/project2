@@ -1,0 +1,575 @@
+namespace Shared.HomeCare.Entities
+{
+    public class AdminPasswordResetToken
+    {
+        public int Id { get; set; }
+
+        public int AdminId { get; set; }
+
+        public required string Token { get; set; }
+
+        public DateTime ExpiresAt { get; set; }
+
+        public bool IsUsed { get; set; } = false;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public AdminUser Admin { get; set; } = null!;
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class AdminRefreshToken
+    {
+        public int Id { get; set; }
+
+        public int AdminId { get; set; }
+
+        public required string TokenHash { get; set; }
+
+        public DateTime ExpiresAt { get; set; }
+
+        public bool IsRevoked { get; set; } = false;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string? ReplacedByTokenHash { get; set; }
+
+        public AdminUser Admin { get; set; } = null!;
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class AdminUser : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string Name { get; set; }
+
+        public required string Email { get; set; }
+
+        public required string MobileNumber { get; set; }
+
+        public string? Address { get; set; }
+
+        public required string PasswordHash { get; set; }
+
+        public string? ProfileImageName { get; set; }
+
+        public bool IsSuperAdmin { get; set; } = false;
+
+        public ICollection<AdminPasswordResetToken> PasswordResetTokens { get; set; } = new List<AdminPasswordResetToken>();
+
+        public ICollection<AdminRefreshToken> RefreshTokens { get; set; } = new List<AdminRefreshToken>();
+    }
+}
+
+
+using System.Net;
+using System.Text.Json.Serialization;
+ 
+namespace Shared.HomeCare.Entities
+{
+    public class ApiResponse
+    {
+        public ApiResponse()
+        {
+            ErrorMessages = new List<string>();
+        }
+        [JsonPropertyName("isSuccess")]
+        public bool IsSuccess { get; set; }
+        [JsonPropertyName("data")]
+        public object Data { get; set; } = null!;
+        [JsonPropertyName("statusCode")]
+        public HttpStatusCode StatusCode { get; set; }
+        [JsonPropertyName("message")]
+        public string Message { get; set; } = null!;
+        [JsonPropertyName("title")]
+        public string Title { get; set; } = null!;
+        [JsonPropertyName("errorMessages")]
+        public List<string> ErrorMessages { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public abstract class BaseEntity
+    {
+        public int? CreatedBy { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public int? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsDeleted { get; set; } = false;
+    }
+}
+
+using Shared.HomeCare.Enums;
+
+namespace Shared.HomeCare.Entities
+{
+    public class Booking
+    {
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; } = null!;
+
+        public int ServiceId { get; set; }
+
+        public ServicesOfSubCategory Service { get; set; } = null!;
+
+        public int ServiceTypeId { get; set; }
+
+        public ServiceTypes ServiceType { get; set; } = null!;
+
+        public int? AssignedPartnerId { get; set; }
+
+        public ServicePartner? AssignedPartner { get; set; }
+
+        public int AddressId { get; set; }
+
+        public UserAddress Address { get; set; } = null!;
+
+        public DateOnly BookingDate { get; set; }
+
+        public string BookingTime { get; set; } = string.Empty;
+
+        public int DurationInMinutes { get; set; }
+
+        public int? OfferId { get; set; }
+
+        public Offer? Offer { get; set; }
+
+        public PaymentMethod PaymentMethod { get; set; }
+
+        public decimal BookingAmount { get; set; }
+
+        public BookingStatus Status { get; set; } = BookingStatus.Pending;
+
+        public PaymentStatus PaymentStatus { get; set; }
+
+        public Transaction? Transaction { get; set; }
+
+        public CouponUsage? CouponUsage { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class Category : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string CategoryName { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public int ServiceTypeId { get; set; }
+
+        public ServiceTypes ServiceTypes { get; set; } = null!;
+
+        public ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class CouponUsage
+    {
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; } = null!;
+
+        public int CouponId { get; set; }
+
+        public Offer Coupon { get; set; } = null!;
+
+        public int BookingId { get; set; }
+
+        public Booking Booking { get; set; } = null!;
+
+        public DateTime UsedAt { get; set; } = DateTime.UtcNow;
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class Language : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string Name { get; set; }
+    }
+}
+
+using Shared.HomeCare.Enums;
+
+namespace Shared.HomeCare.Entities
+{
+    public class Offer : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string CouponCode { get; set; }
+
+        public string? CouponDescription { get; set; }
+
+        public decimal DiscountPercentage { get; set; }
+
+        public int AppliedCount { get; set; } = 0;
+
+        public bool IsActive { get; set; } = true;
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class Otp
+    {
+        public int Id { get; set; }
+
+        public string Email { get; set; } = null!;
+
+        public string Code { get; set; } = null!;
+
+        public DateTime ExpiryAt { get; set; }
+
+        public bool IsUsed { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public string? RefreshTokenHash { get; set; }
+
+        public DateTime? RefreshTokenExpiryAt { get; set; }
+    }
+}
+
+using Shared.HomeCare.Enums;
+ 
+namespace Shared.HomeCare.Entities
+{
+    public class ServiceInclusionExclusion : BaseEntity
+    {
+        public int Id { get; set; }
+ 
+        public int ServiceId { get; set; }
+ 
+        public ServicesOfSubCategory Service { get; set; } = null!;
+ 
+        public string Item { get; set; } = string.Empty;
+ 
+        public ServiceInclusionExclusionType Type { get; set; }
+    }
+}
+
+using Shared.HomeCare.Enums;
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartner : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string FullName { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public required string MobileNumber { get; set; }
+
+        public required string Email { get; set; }
+
+        public int ApplyingForTypeId { get; set; }
+
+        public required string PermanentAddress { get; set; }
+
+        public required string ResidentialAddress { get; set; }
+        
+        public string? ProfileImageUrl { get; set; }
+
+        public ServicePartnerStatus Status { get; set; } = ServicePartnerStatus.Pending;
+
+        public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.Unverified;
+        public DateTime? VerifiedAt { get; set; }
+
+        public int? VerifiedBy { get; set; }
+
+        public string? RejectionReason { get; set; }
+
+        public int TotalJobsCompleted { get; set; } = 0;
+        
+        public ServiceTypes? ServiceTypes { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerAttachment : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public required string FileUrl { get; set; }
+
+        public required string FileName { get; set; }
+
+        public string? FileType { get; set; }
+
+        public int? FileSizeKb { get; set; }
+
+        public string? DocumentLabel { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerEducation : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public required string SchoolCollege { get; set; }
+
+        public int PassingYear { get; set; }
+
+        public decimal? Marks { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerExperience : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public required string CompanyName { get; set; }
+
+        public required string Role { get; set; }
+
+        public DateTime FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
+    }
+}
+
+using Shared.HomeCare.Enums;
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerLanguage : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public int LanguageId { get; set; }
+
+        public Proficiency Proficiency { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerServiceOffered : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public int SubCategoryId { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicePartnerSkill : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServicePartnerId { get; set; }
+
+        public int CategoryId { get; set; }
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicesImages : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public int ServiceId { get; set; }
+
+        public ServicesOfSubCategory Service { get; set; } = null!;
+
+        public string ImageName { get; set; } = string.Empty;
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServicesOfSubCategory : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string Name { get; set; }
+
+        public int SubCategoryId { get; set; }
+
+        public SubCategory SubCategory { get; set; } = null!;
+
+        public required string Duration { get; set; } =null!;
+
+        public string? Description { get; set; }
+
+        public decimal Price { get; set; }
+
+        public decimal Commission { get; set; }
+
+        public bool IsAvailable { get; set; }
+
+        public ICollection<ServicesImages> Images { get; set; } = new List<ServicesImages>();
+
+        public ICollection<ServiceInclusionExclusion> ServiceFilters { get; set; } = new List<ServiceInclusionExclusion>();
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class ServiceTypes : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string ServiceName { get; set; }
+
+        public string? ImageName { get; set; }
+
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class SubCategory : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public required string SubCategoryName { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; } = null!;
+
+        public ICollection<ServicesOfSubCategory> Services { get; set; } = new List<ServicesOfSubCategory>();
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class SupportTicket
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public string ContactNumber { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+
+        public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
+    }
+}
+
+using Shared.HomeCare.Enums;
+
+namespace Shared.HomeCare.Entities
+{
+    public class Transaction : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public Guid TransactionId { get; set; } = Guid.NewGuid();
+
+        public int BookingId { get; set; }
+
+        public Booking Booking { get; set; } = null!;
+
+        public int UserId { get; set; }
+
+        public User User { get; set; } = null!;
+
+        public int ServiceId { get; set; }
+
+        public ServicesOfSubCategory Service { get; set; } = null!;
+
+        public decimal TransactionAmount { get; set; }
+
+        public PaymentMethod PaymentMethod { get; set; }
+
+        public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
+
+        public PaymentStatus PaymentStatus { get; set; }
+
+        public string? StripePaymentIntentId { get; set; }     
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class User : BaseEntity
+    {
+        public int Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public required string Email { get; set; }
+
+        public bool IsEmailVerified { get; set; } = false;
+
+        public string MobileNumber { get; set; } = "0000000000";
+
+        public string Status { get; set; } = "Active";
+    }
+}
+
+namespace Shared.HomeCare.Entities
+{
+    public class UserAddress : BaseEntity
+    {
+        public int AddressId { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; } = null!;
+
+        public string HouseFlatNumber { get; set; } = string.Empty;
+
+        public string? Landmark { get; set; }
+
+        public string? FullAddress { get; set; }
+
+        public string? SaveAs { get; set; }
+
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+    }
+}
